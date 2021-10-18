@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:daily_schedule/schedule_brain.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -12,11 +13,15 @@ const kBodyTextStyle = TextStyle(
   fontWeight: FontWeight.bold,
 );
 
+final FirebaseFirestore db = FirebaseFirestore.instance;
+
 class SchedulePage extends StatelessWidget {
   SchedulePage({Key? key}) : super(key: key);
 
   final String weekday = DateFormat('EEEE').format(DateTime.now());
   final ScheduleBrain scheduleBrain = ScheduleBrain();
+  final Future<QuerySnapshot> events =
+      db.collection('events').orderBy('start').get();
 
   @override
   Widget build(BuildContext context) {
@@ -42,11 +47,19 @@ class SchedulePage extends StatelessWidget {
             const SizedBox(height: 21.0),
             Expanded(
               flex: 7,
-              child: ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 17.0),
-                children: scheduleBrain.getSchedule().isNotEmpty
-                    ? scheduleBrain.getSchedule()
-                    : emptySchedule(),
+              child: FutureBuilder(
+                future: events,
+                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (!snapshot.hasData) {
+                    return emptySchedule();
+                  }
+                  return ListView(
+                    padding: const EdgeInsets.symmetric(horizontal: 17.0),
+                    children: snapshot.data!.docs.map((event) {
+                      return scheduleBrain.createEvent(event);
+                    }).toList(),
+                  );
+                },
               ),
             ),
             const SizedBox(height: 37.0)
@@ -56,17 +69,17 @@ class SchedulePage extends StatelessWidget {
     );
   }
 
-  List<Widget> emptySchedule() {
-    return [
-      const Center(
+  Column emptySchedule() {
+    return Column(children: const [
+      Center(
         child: Text(
           'There is no more schedule\ntoday!',
           textAlign: TextAlign.center,
           style: kBodyTextStyle,
         ),
       ),
-      const SizedBox(height: 17.0),
-      const Icon(Icons.mood_outlined, size: 49.0),
-    ];
+      SizedBox(height: 17.0),
+      Icon(Icons.mood_outlined, size: 49.0),
+    ]);
   }
 }

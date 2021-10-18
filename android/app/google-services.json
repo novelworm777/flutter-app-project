@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "883186200294",
+    "project_id": "daily-schedule-app-e8776",
+    "storage_bucket": "daily-schedule-app-e8776.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:883186200294:android:4e791ef57f0d7a34a19527",
+        "android_client_info": {
+          "package_name": "com.seventhfamiliar.daily_schedule"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "883186200294-7dahaqn1e48vnhe0q9aqqdmm41jdp1q7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7Kr7jfYdI5urf2Q7qUhHpsvNxZioukAU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "883186200294-7dahaqn1e48vnhe0q9aqqdmm41jdp1q7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
