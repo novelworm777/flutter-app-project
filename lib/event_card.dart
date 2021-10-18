@@ -26,11 +26,11 @@ class EventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 83.0,
       child: Card(
         color: colour,
-        margin: const EdgeInsets.symmetric(vertical: 7.0, horizontal: 13.0),
+        margin: const EdgeInsets.symmetric(vertical: 7.0),
         child: Padding(
           padding: const EdgeInsets.all(13.0),
           child: Column(

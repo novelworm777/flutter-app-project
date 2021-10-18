@@ -7,6 +7,11 @@ const kWeekdayTitleStyle = TextStyle(
   fontWeight: FontWeight.bold,
 );
 
+const kBodyTextStyle = TextStyle(
+  fontSize: 21.0,
+  fontWeight: FontWeight.bold,
+);
+
 class SchedulePage extends StatelessWidget {
   SchedulePage({Key? key}) : super(key: key);
 
@@ -34,19 +39,34 @@ class SchedulePage extends StatelessWidget {
               width: 210.0,
               child: Divider(color: Colors.white),
             ),
+            const SizedBox(height: 21.0),
             Expanded(
               flex: 7,
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 21.0, top: 7.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: scheduleBrain.getTodaySchedule(),
-                ),
+              child: ListView(
+                padding: const EdgeInsets.symmetric(horizontal: 17.0),
+                children: scheduleBrain.getSchedule().isNotEmpty
+                    ? scheduleBrain.getSchedule()
+                    : emptySchedule(),
               ),
             ),
+            const SizedBox(height: 37.0)
           ],
         ),
       ),
     );
+  }
+
+  List<Widget> emptySchedule() {
+    return [
+      const Center(
+        child: Text(
+          'There is no more schedule\ntoday!',
+          textAlign: TextAlign.center,
+          style: kBodyTextStyle,
+        ),
+      ),
+      const SizedBox(height: 17.0),
+      const Icon(Icons.mood_outlined, size: 49.0),
+    ];
   }
 }
