@@ -1,50 +1,122 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:daily_schedule/event_card.dart';
+import 'package:daily_schedule/constants.dart';
+import 'package:daily_schedule/components/event_card.dart';
+import 'package:daily_schedule/models/event.dart';
+import 'package:daily_schedule/models/weekday_events.dart';
+import 'package:daily_schedule/repositories/schedule_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-
-const List _eventColours = [
-  Color(0xFFFFCDD2),
-  Color(0xFFFFCCBC),
-  Color(0xFFFFF9C4),
-  Color(0xFFC8E6C9),
-  Color(0xFFB2DFDB),
-  Color(0xFFBBDEFB),
-  Color(0xFFE1BEE7),
-];
 
 class ScheduleBrain {
-  final String _weekday = DateFormat('EEEE').format(DateTime.now());
+  Widget getEvents() {
+    return FutureBuilder(
+      future: events,
+      builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (!snapshot.hasData) {
+          return _emptySchedule();
+        }
+        return ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 17.0),
+          children: _processEvents(snapshot.data!.docs),
+        );
+      },
+    );
+  }
+
+  Column _emptySchedule() {
+    return Column(children: const [
+      Center(
+        child: Text(
+          'There is no more schedule\ntoday!',
+          textAlign: TextAlign.center,
+          style: kBodyTextStyle,
+        ),
+      ),
+      SizedBox(height: 17.0),
+      Icon(Icons.mood_outlined, size: 49.0),
+    ]);
+  }
+
   final int _hour = DateTime.now().hour;
 
-  // final List<Map> _events = [
-  //   {'name': 'Work Time', 'start': 9, 'end': 17, 'weekday': 'Monday'},
-  //   {'name': 'Flutter Study Time', 'start': 19, 'end': 22, 'weekday': 'Monday'},
-  //   {'name': 'Knitting Time', 'start': 22, 'end': 23, 'weekday': 'Monday'},
-  // ];
+  List<Widget> _processEvents(List<QueryDocumentSnapshot> snapshots) {
+    // filter event that has passed
+    List<QueryDocumentSnapshot> filtered =
+        snapshots.where((event) => event['end'] > _hour).toList();
 
-  int _colourIndex = 0;
+    // sort event based on start time
+    filtered.sort((a, b) => a['start'] - b['start']);
 
-  Widget createEvent(QueryDocumentSnapshot event) {
-    if (event['end'] <= _hour || event['weekday'] != _weekday) {
-      return Container();
+    // create event card
+    if (filtered.isNotEmpty) {
+      return filtered.map((event) => _createEvent(event)).toList();
     }
+    // empty event
+    else {
+      return [_emptySchedule()];
+    }
+  }
 
-    EventCard eventCard = EventCard(
+  EventCard _createEvent(QueryDocumentSnapshot event) {
+    return EventCard(
       title: event['name'],
       time: _getTime(event['start'], event['end']),
       colour: _getColour(_colourIndex),
     );
-    _increaseIndex();
-
-    return eventCard;
   }
 
   String _getTime(int start, int end) => '$start - $end';
 
-  Color _getColour(int index) => _eventColours[index];
+  int _colourIndex = 0;
+
+  Color _getColour(int index) {
+    _increaseIndex();
+    return kEventColours[index];
+  }
 
   // there can only be 7 events at max (according to number of colours)
   _increaseIndex() => _colourIndex =
-      _colourIndex + 1 == _eventColours.length ? 0 : _colourIndex + 1;
+      _colourIndex + 1 == kEventColours.length ? 0 : _colourIndex + 1;
+
+  Future<QuerySnapshot> getAllEvents() => rAllEvents;
+
+  List<WeekdayEvents> classifyEvents(List<QueryDocumentSnapshot> snapshots) {
+    List<WeekdayEvents> allSchedules = [];
+    List<String> weekdays = kWeekdays;
+
+    for (String weekday in weekdays) {
+      // filter event per weekday
+      List<QueryDocumentSnapshot> filtered =
+          snapshots.where((event) => event['weekday'] == weekday).toList();
+
+      if (filtered.isEmpty) continue;
+
+      // create list of events
+      List<Event> events = filtered
+          .map((event) => Event(
+              id: event.id,
+              name: event['name'],
+              start: event['start'],
+              end: event['end'],
+              weekday: event['weekday']))
+          .toList();
+
+      // create weekday object
+      WeekdayEvents weekdayEvents =
+          WeekdayEvents(events: events, weekday: weekday);
+      allSchedules.add(weekdayEvents);
+    }
+
+    return allSchedules;
+  }
+
+  Future deleteEvent(String id) => cudAllEvents.doc(id).delete();
+
+  addEvent(Event event) {
+    List<String> attributes = event.getClassAttributes();
+    Map newDocument = {};
+    for (String field in attributes) {
+      newDocument[field] = event.getAttributeValueOf(field);
+    }
+    print(newDocument);
+  }
 }

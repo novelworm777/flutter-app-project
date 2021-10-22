@@ -1,4 +1,7 @@
-import 'package:daily_schedule/schedule_page.dart';
+import 'package:daily_schedule/screens/all_schedules_page.dart';
+import 'package:daily_schedule/screens/create_event_page.dart';
+import 'package:daily_schedule/screens/schedule_page.dart';
+import 'package:daily_schedule/screens/setting_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -14,8 +17,15 @@ class DailySchedule extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData.dark(),
-      home: SchedulePage(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => SchedulePage(),
+        '/settings': (context) => const SettingPage(),
+        '/all-schedules': (context) => AllSchedulesPage(),
+        '/create-event': (context) => CreateEventPage(),
+      },
     );
   }
 }

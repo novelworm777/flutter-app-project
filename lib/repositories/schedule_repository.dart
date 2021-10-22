@@ -1,0 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
+
+final FirebaseFirestore db = FirebaseFirestore.instance;
+final Future<QuerySnapshot> events = db
+    .collection('events')
+    .where('weekday', isEqualTo: DateFormat('EEEE').format(DateTime.now()))
+    .get();
+final Future<QuerySnapshot> rAllEvents =
+    db.collection('events').orderBy('weekday').get();
+final CollectionReference<Map> cudAllEvents = db.collection('events');

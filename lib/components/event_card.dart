@@ -1,16 +1,5 @@
+import 'package:daily_schedule/constants.dart';
 import 'package:flutter/material.dart';
-
-const kTitleTextStyle = TextStyle(
-  fontSize: 17.0,
-  color: Color(0xFF212121),
-  fontWeight: FontWeight.bold,
-);
-
-const kTimeTextStyle = TextStyle(
-  fontSize: 15.0,
-  color: Color(0xFF757575),
-  fontWeight: FontWeight.bold,
-);
 
 class EventCard extends StatelessWidget {
   final String title;
