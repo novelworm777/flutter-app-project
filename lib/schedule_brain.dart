@@ -8,9 +8,15 @@ import 'package:flutter/material.dart';
 
 class ScheduleBrain {
   Widget getEvents() {
-    return FutureBuilder(
-      future: events,
+    return StreamBuilder(
+      stream: events.snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.hasError) {
+          return const Text('Something went wrong');
+        }
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Text("Loading");
+        }
         if (!snapshot.hasData) {
           return _emptySchedule();
         }
@@ -77,7 +83,7 @@ class ScheduleBrain {
   _increaseIndex() => _colourIndex =
       _colourIndex + 1 == kEventColours.length ? 0 : _colourIndex + 1;
 
-  Future<QuerySnapshot> getAllEvents() => readAllEvents;
+  Query<Map<String, dynamic>> getAllEvents() => readAllEvents;
 
   List<WeekdayEvents> classifyEvents(List<QueryDocumentSnapshot> snapshots) {
     List<WeekdayEvents> allSchedules = [];

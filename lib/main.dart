@@ -23,7 +23,7 @@ class DailySchedule extends StatelessWidget {
       routes: {
         '/': (context) => SchedulePage(),
         '/settings': (context) => const SettingPage(),
-        '/all-schedules': (context) => AllSchedulesPage(),
+        '/all-schedules': (context) => const AllSchedulesPage(),
         '/create-event': (context) => CreateEventPage(),
       },
     );

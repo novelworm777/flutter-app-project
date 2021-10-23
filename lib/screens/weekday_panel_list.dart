@@ -3,19 +3,22 @@ import 'package:daily_schedule/schedule_brain.dart';
 import 'package:flutter/material.dart';
 
 class WeekdayPanelList extends StatefulWidget {
-  WeekdayPanelList({Key? key, required this.weekdayData}) : super(key: key);
+  const WeekdayPanelList({Key? key, required this.weekdayData})
+      : super(key: key);
 
   final List<WeekdayEvents> weekdayData;
-  final ScheduleBrain _scheduleBrain = ScheduleBrain();
 
   @override
   State<WeekdayPanelList> createState() => _WeekdayPanelListState();
 }
 
 class _WeekdayPanelListState extends State<WeekdayPanelList> {
+  final ScheduleBrain _scheduleBrain = ScheduleBrain();
+
   @override
   Widget build(BuildContext context) {
     return ExpansionPanelList(
+      animationDuration: const Duration(milliseconds: 370),
       expansionCallback: (int index, bool isExpanded) {
         setState(() {
           widget.weekdayData[index].isExpanded = !isExpanded;
@@ -24,6 +27,7 @@ class _WeekdayPanelListState extends State<WeekdayPanelList> {
       children: widget.weekdayData.map((data) {
         Color colour = data.isExpanded ? Colors.lightBlueAccent : Colors.white;
         return ExpansionPanel(
+          canTapOnHeader: true,
           headerBuilder: (BuildContext context, bool isExpanded) {
             return ListTile(
                 title: Text(data.weekday, style: TextStyle(color: colour)));
@@ -39,10 +43,7 @@ class _WeekdayPanelListState extends State<WeekdayPanelList> {
                 trailing: GestureDetector(
                   onTap: () {
                     setState(() {
-                      // TODO: fix bug in delete
-                      data.events
-                          .removeWhere((currEvent) => event == currEvent);
-                      widget._scheduleBrain.deleteEvent(event.id!);
+                      _scheduleBrain.deleteEvent(event.id!);
                     });
                   },
                   child: const Icon(
