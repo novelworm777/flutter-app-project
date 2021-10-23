@@ -48,7 +48,7 @@ class ScheduleBrain {
 
     // create event card
     if (filtered.isNotEmpty) {
-      return filtered.map((event) => _createEvent(event)).toList();
+      return filtered.map((event) => _createEventCard(event)).toList();
     }
     // empty event
     else {
@@ -56,7 +56,7 @@ class ScheduleBrain {
     }
   }
 
-  EventCard _createEvent(QueryDocumentSnapshot event) {
+  EventCard _createEventCard(QueryDocumentSnapshot event) {
     return EventCard(
       title: event['name'],
       time: _getTime(event['start'], event['end']),
@@ -77,7 +77,7 @@ class ScheduleBrain {
   _increaseIndex() => _colourIndex =
       _colourIndex + 1 == kEventColours.length ? 0 : _colourIndex + 1;
 
-  Future<QuerySnapshot> getAllEvents() => rAllEvents;
+  Future<QuerySnapshot> getAllEvents() => readAllEvents;
 
   List<WeekdayEvents> classifyEvents(List<QueryDocumentSnapshot> snapshots) {
     List<WeekdayEvents> allSchedules = [];
@@ -109,14 +109,27 @@ class ScheduleBrain {
     return allSchedules;
   }
 
-  Future deleteEvent(String id) => cudAllEvents.doc(id).delete();
+  Future deleteEvent(String id) => createDeleteEvent.doc(id).delete();
 
-  addEvent(Event event) {
+  createEvent(data) {
+    Event event = Event(
+      name: data['name'],
+      start: data['time'].start.round(),
+      end: data['time'].end.round(),
+      weekday: data['weekday'],
+    );
+    _addEvent(event);
+  }
+
+  Future _addEvent(Event event) {
+    // create document as Map
     List<String> attributes = event.getClassAttributes();
-    Map newDocument = {};
+    Map<String, dynamic> newDocument = {};
     for (String field in attributes) {
       newDocument[field] = event.getAttributeValueOf(field);
     }
-    print(newDocument);
+
+    // add document
+    return createDeleteEvent.add(newDocument);
   }
 }

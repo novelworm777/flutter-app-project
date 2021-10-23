@@ -6,6 +6,6 @@ final Future<QuerySnapshot> events = db
     .collection('events')
     .where('weekday', isEqualTo: DateFormat('EEEE').format(DateTime.now()))
     .get();
-final Future<QuerySnapshot> rAllEvents =
+final Future<QuerySnapshot> readAllEvents =
     db.collection('events').orderBy('weekday').get();
-final CollectionReference<Map> cudAllEvents = db.collection('events');
+final CollectionReference<Map> createDeleteEvent = db.collection('events');

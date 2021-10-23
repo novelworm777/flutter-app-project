@@ -3,12 +3,17 @@ import 'package:daily_schedule/schedule_brain.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class SchedulePage extends StatelessWidget {
+class SchedulePage extends StatefulWidget {
   SchedulePage({Key? key}) : super(key: key);
 
   final String weekday = DateFormat('EEEE').format(DateTime.now());
-  final ScheduleBrain scheduleBrain = ScheduleBrain();
+  final ScheduleBrain _scheduleBrain = ScheduleBrain();
 
+  @override
+  State<SchedulePage> createState() => _SchedulePageState();
+}
+
+class _SchedulePageState extends State<SchedulePage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -23,7 +28,7 @@ class SchedulePage extends StatelessWidget {
                   Expanded(
                     flex: 7,
                     child: Text(
-                      weekday,
+                      widget.weekday,
                       textAlign: TextAlign.center,
                       style: kWeekdayTitleStyle,
                     ),
@@ -56,7 +61,7 @@ class SchedulePage extends StatelessWidget {
             const SizedBox(height: 21.0),
             Expanded(
               flex: 7,
-              child: scheduleBrain.getEvents(),
+              child: widget._scheduleBrain.getEvents(),
             ),
             const SizedBox(height: 37.0)
           ],

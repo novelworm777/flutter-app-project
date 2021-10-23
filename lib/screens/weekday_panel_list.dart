@@ -3,25 +3,22 @@ import 'package:daily_schedule/schedule_brain.dart';
 import 'package:flutter/material.dart';
 
 class WeekdayPanelList extends StatefulWidget {
-  const WeekdayPanelList({Key? key, required this.weekdayData})
-      : super(key: key);
+  WeekdayPanelList({Key? key, required this.weekdayData}) : super(key: key);
 
   final List<WeekdayEvents> weekdayData;
+  final ScheduleBrain _scheduleBrain = ScheduleBrain();
 
   @override
   State<WeekdayPanelList> createState() => _WeekdayPanelListState();
 }
 
 class _WeekdayPanelListState extends State<WeekdayPanelList> {
-  final ScheduleBrain _scheduleBrain = ScheduleBrain();
-
   @override
   Widget build(BuildContext context) {
     return ExpansionPanelList(
       expansionCallback: (int index, bool isExpanded) {
         setState(() {
-          widget.weekdayData[index].isExpanded =
-              !widget.weekdayData[index].isExpanded;
+          widget.weekdayData[index].isExpanded = !isExpanded;
         });
       },
       children: widget.weekdayData.map((data) {
@@ -42,9 +39,10 @@ class _WeekdayPanelListState extends State<WeekdayPanelList> {
                 trailing: GestureDetector(
                   onTap: () {
                     setState(() {
+                      // TODO: fix bug in delete
                       data.events
                           .removeWhere((currEvent) => event == currEvent);
-                      _scheduleBrain.deleteEvent(event.id!);
+                      widget._scheduleBrain.deleteEvent(event.id!);
                     });
                   },
                   child: const Icon(

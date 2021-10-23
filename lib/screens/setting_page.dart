@@ -9,9 +9,7 @@ class SettingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Settings'),
-        ),
+        appBar: AppBar(title: const Text('Settings')),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: const [

@@ -27,6 +27,12 @@ const TextStyle kOptionTextStyle = TextStyle(
   letterSpacing: 1.3,
 );
 
+const TextStyle kButtonTextStyle = TextStyle(
+  fontSize: 17.0,
+  letterSpacing: 1.7,
+  fontWeight: FontWeight.w700,
+);
+
 const List<Color> kEventColours = [
   Color(0xFFFFCDD2),
   Color(0xFFFFCCBC),
