@@ -1,3 +1,4 @@
+import 'package:daily_schedule/components/app_settings.dart';
 import 'package:daily_schedule/constants.dart';
 import 'package:daily_schedule/schedule_brain.dart';
 import 'package:flutter/material.dart';
@@ -22,34 +23,19 @@ class _SchedulePageState extends State<SchedulePage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Expanded(
+              flex: 1,
               child: Row(
                 children: [
                   Expanded(child: Container()),
                   Expanded(
-                    flex: 7,
+                    flex: 5,
                     child: Text(
                       widget.weekday,
                       textAlign: TextAlign.center,
                       style: kWeekdayTitleStyle,
                     ),
                   ),
-                  Expanded(
-                    child: Container(
-                      margin: const EdgeInsets.only(top: 7.0, right: 7.0),
-                      child: Align(
-                        alignment: Alignment.topRight,
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.pushNamed(context, '/settings');
-                          },
-                          child: const Icon(
-                            Icons.settings,
-                            size: 24.0,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  const AppSettings(),
                 ],
               ),
             ),
