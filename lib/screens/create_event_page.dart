@@ -68,7 +68,7 @@ class CreateEventPage extends StatelessWidget {
                     Navigator.pop(context);
                   }
                 },
-                title: 'Center',
+                title: 'Create',
               ),
             ],
           ),
