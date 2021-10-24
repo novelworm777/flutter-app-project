@@ -1,6 +1,7 @@
 import 'package:daily_schedule/models/weekday_events.dart';
 import 'package:daily_schedule/schedule_brain.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class WeekdayPanelList extends StatefulWidget {
   const WeekdayPanelList({Key? key, required this.weekdayData})
@@ -14,6 +15,8 @@ class WeekdayPanelList extends StatefulWidget {
 
 class _WeekdayPanelListState extends State<WeekdayPanelList> {
   final ScheduleBrain _scheduleBrain = ScheduleBrain();
+
+  void handleSlideIsOpenChanged(bool? isOpen) {}
 
   @override
   Widget build(BuildContext context) {
@@ -34,23 +37,26 @@ class _WeekdayPanelListState extends State<WeekdayPanelList> {
           },
           body: Column(
             children: data.events.map((event) {
-              return ListTile(
-                title: Text(event.name),
-                subtitle: Padding(
-                  padding: const EdgeInsets.only(top: 7.0),
-                  child: Text('${event.start} - ${event.end}'),
-                ),
-                trailing: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _scheduleBrain.deleteEvent(event.id!);
-                    });
-                  },
-                  child: const Icon(
-                    Icons.delete,
-                    color: Colors.red,
+              return Slidable(
+                child: ListTile(
+                  title: Text(event.name),
+                  subtitle: Padding(
+                    padding: const EdgeInsets.only(top: 7.0),
+                    child: Text('${event.start} - ${event.end}'),
                   ),
                 ),
+                actionPane: const SlidableDrawerActionPane(),
+                actionExtentRatio: 0.21,
+                secondaryActions: [
+                  IconSlideAction(
+                    caption: 'Delete',
+                    icon: Icons.delete,
+                    color: const Color(0xFFe57373),
+                    onTap: () {
+                      _scheduleBrain.deleteEvent(event.id!);
+                    },
+                  ),
+                ],
               );
             }).toList(),
           ),
