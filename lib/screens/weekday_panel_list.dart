@@ -47,6 +47,21 @@ class _WeekdayPanelListState extends State<WeekdayPanelList> {
                 ),
                 actionPane: const SlidableDrawerActionPane(),
                 actionExtentRatio: 0.21,
+                actions: [
+                  IconSlideAction(
+                    caption: 'Edit',
+                    icon: Icons.mode_edit,
+                    color: const Color(0xFF9ccc65),
+                    foregroundColor: Colors.white,
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        '/event-form',
+                        arguments: event, // send arguments to next page
+                      );
+                    },
+                  ),
+                ],
                 secondaryActions: [
                   IconSlideAction(
                     caption: 'Delete',

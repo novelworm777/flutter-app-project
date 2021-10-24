@@ -16,7 +16,7 @@ class SettingPage extends StatelessWidget {
             SettingsOption(
                 route: '/all-schedules', title: 'View All Schedules'),
             SettingsDivider(),
-            SettingsOption(route: '/create-event', title: 'Create New Event'),
+            SettingsOption(route: '/event-form', title: 'Create New Event'),
             SettingsDivider(),
           ],
         ),

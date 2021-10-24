@@ -117,25 +117,43 @@ class ScheduleBrain {
 
   Future deleteEvent(String id) => createDeleteEvent.doc(id).delete();
 
-  createEvent(data) {
-    Event event = Event(
+  Event _createEventObject(Map<String, dynamic> data) {
+    return Event(
       name: data['name'],
       start: data['time'].start.round(),
       end: data['time'].end.round(),
       weekday: data['weekday'],
     );
-    _addEvent(event);
   }
 
-  Future _addEvent(Event event) {
-    // create document as Map
-    List<String> attributes = event.getClassAttributes();
-    Map<String, dynamic> newDocument = {};
-    for (String field in attributes) {
-      newDocument[field] = event.getAttributeValueOf(field);
-    }
+  Future addEvent(Map<String, dynamic> data) {
+    // convert form data into event object
+    Event event = _createEventObject(data);
 
-    // add document
+    // create document as Map
+    Map<String, dynamic> newDocument = _createMapDocument(event);
+
+    // add document to database
     return createDeleteEvent.add(newDocument);
+  }
+
+  Map<String, dynamic> _createMapDocument(Event event) {
+    List<String> attributes = event.getClassAttributes();
+    Map<String, dynamic> document = {};
+    for (String field in attributes) {
+      document[field] = event.getAttributeValueOf(field);
+    }
+    return document;
+  }
+
+  Future updateEvent(String? id, Map<String, dynamic> data) {
+    // convert form data into event object
+    Event event = _createEventObject(data);
+
+    // create document as Map
+    Map<String, dynamic> updatedDocument = _createMapDocument(event);
+
+    // update document in database
+    return createDeleteEvent.doc(id).update(updatedDocument);
   }
 }

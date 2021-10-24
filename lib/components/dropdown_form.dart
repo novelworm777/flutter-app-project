@@ -7,17 +7,20 @@ class DropdownForm extends StatelessWidget {
     required this.name,
     required this.hint,
     required this.items,
+    this.initialValue,
   }) : super(key: key);
 
   final String name;
   final String hint;
   final List<String> items;
+  final String? initialValue;
 
   @override
   Widget build(BuildContext context) {
     return FormBuilderDropdown(
       name: name,
       hint: Text(hint),
+      initialValue: initialValue,
       decoration: const InputDecoration(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(13.0)),

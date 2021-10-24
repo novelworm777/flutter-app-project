@@ -1,5 +1,5 @@
 import 'package:daily_schedule/screens/all_schedules_page.dart';
-import 'package:daily_schedule/screens/create_event_page.dart';
+import 'package:daily_schedule/screens/event_form_page.dart';
 import 'package:daily_schedule/screens/schedule_page.dart';
 import 'package:daily_schedule/screens/setting_page.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -24,7 +24,7 @@ class DailySchedule extends StatelessWidget {
         '/': (context) => SchedulePage(),
         '/settings': (context) => const SettingPage(),
         '/all-schedules': (context) => const AllSchedulesPage(),
-        '/create-event': (context) => CreateEventPage(),
+        '/event-form': (context) => EventFormPage(),
       },
     );
   }
